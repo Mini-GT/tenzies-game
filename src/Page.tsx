@@ -1,11 +1,13 @@
+import Main from './components/Main'
 import './Page.css'
 
-function App() {
+function Page() {
 
   return (
     <>
+      <Main />
     </>
   )
 }
 
-export default App
+export default Page
