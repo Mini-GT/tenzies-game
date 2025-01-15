@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #0B2434;
+  font-family: "inter", sans-serif;
+}
+
+main {
+  background-color: #F5F5F5;
+  width: 50rem;
+  height: 50rem;
+  display: flex;
+  justify-content: center;
+  border-radius: 8px;
+  margin: 0 auto;
+}
+
+.main_container {
+  margin: 4rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.main_content > h1 {
+  font-size: 4rem;
+  color: #2B283A;
+  margin: 0;
+}
+
+.main_content > p {
+  font-size: 2rem;
+  margin: 10px 0;
+  text-align: center;
+  font-weight: bold;
+  color: #4A4E74;
+}
+
+.grid_container {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 1rem;
+}
+
+.grid_item {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: xxx-large;
+  font-weight: bold;
+  background-color: #FFFFFF;
+  border-radius: 8px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+}
+
+.grid_item:hover {
+  background-color: #F5F6F6;
+}
+
+.dice_btn {
+  background-color: #5035FF;
+  border: none;
+  width: 25%;
+  height: 4rem;
+  cursor: pointer;
+  margin: 0 auto;
+  border-radius: 8px;
+  color: #FFFFFF;
+  font-size: 2rem;
+}
+
+.dice_btn:hover {
+  background-color: #3A1FCC;
+}
