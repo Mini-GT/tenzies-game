@@ -78,3 +78,11 @@ main {
 .dice_btn:hover {
   background-color: #3A1FCC;
 }
+
+.selected {
+  background-color: #59E391;
+}
+
+.selected:hover {
+  background-color: #5dd38c;
+}
