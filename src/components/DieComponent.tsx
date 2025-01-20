@@ -3,13 +3,19 @@ import { DieData } from "../types/dieData.types";
 
 export default function Die({data} : {data: DieData[]}) {
   //initialize zustand storeId
-  const storeId = useStoreId((state) => state.storeId)
+  const {storeId} = useStoreId()
 
   // handle the selected class
   const handleSelected = (e: React.MouseEvent<HTMLElement>) => {
     const selectedId = e.currentTarget.dataset.id
     const selectedValue = e.currentTarget.dataset.value
     const clickedElem = e.currentTarget
+
+    //turn into an object
+    const dataArr = {
+      id: Number(selectedId),
+      value: Number(selectedValue)
+    }
     
     // add selected color if it has no classname 'selected', else remove classname
     if(clickedElem.classList.contains('selected')) {
@@ -20,7 +26,7 @@ export default function Die({data} : {data: DieData[]}) {
 
     // store selected ID in zustand
     if(!selectedId || !selectedValue) return "no ID selected"
-    storeId(Number(selectedId), Number(selectedValue))
+    storeId(dataArr)
   };
 
   // map each data and render its values
