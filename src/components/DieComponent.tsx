@@ -1,52 +1,22 @@
-import useStoreId from "../store/storeId";
-import { DieData } from "../types/dieData.types";
+type DieProps = {
+  value: number
+  selected: boolean
+  dieId: number
+  handleSelect: (id: number, value: number) => void
+}
 
-export default function Die({data} : {data: DieData[]}) {
-  //initialize zustand storeId
-  const {storeId} = useStoreId()
-
-  // handle the selected class
-  const handleSelected = (e: React.MouseEvent<HTMLElement>) => {
-    const selectedId = e.currentTarget.dataset.id
-    const selectedValue = e.currentTarget.dataset.value
-    const clickedElem = e.currentTarget
-
-    //turn into an object
-    const dataArr = {
-      id: Number(selectedId),
-      value: Number(selectedValue)
-    }
-    
-    // add selected color if it has no classname 'selected', else remove classname
-    if(clickedElem.classList.contains('selected')) {
-      clickedElem.classList.remove('selected')
-    } else {
-      clickedElem.classList.toggle('selected')
-    }
-
-    // store selected ID in zustand
-    if(!selectedId || !selectedValue) return "no ID selected"
-    storeId(dataArr)
-  };
-
-  // map each data and render its values
-  const gridItem = data.map((die) => {
-    return <div 
-      className={`grid_item`} 
-      data-id={die.id} 
-      data-value={die.value}
-      onClick={handleSelected} 
-      key={die.id}>{die.value}</div>
-  })
-
+export default function Die({
+  value,
+  selected,
+  dieId,
+  handleSelect
+} : DieProps) {
   return (
-    <div>
-      <section>
-        <div className="grid_container">
-          {gridItem}
-        </div>
-      </section>
-    </div>
-    
+    <button 
+      className={`grid_button ${selected ? "selected" : null}`}
+      onClick={() => handleSelect(dieId, value)}
+    >
+      {value}
+    </button>
   )
 }
