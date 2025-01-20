@@ -1,15 +1,20 @@
 import { create } from "zustand";
 
+interface Die {
+  id: number | null
+  value: number | null
+}
+
 interface storeStateId {
-  storeDieData: {id: number; value: number},
-  storeId: (selectedId: number, selectedValue: number) => void
+  storeDieData: Die[],
+  storeId: (...args: Die[]) => void
 }
 
 const useStoreId = create<storeStateId>()((set) => ({
-  storeDieData: {id: 0, value: 0},
-  storeId: (selectedId: number, selectedValue: number) => 
+  storeDieData: [],
+  storeId: (...args: Die[]) => 
     set((state) => ({
-      storeDieData: {...state.storeDieData, id: selectedId, value: selectedValue}
+      storeDieData: [...state.storeDieData, ...args] // update storeDieData object arr
     }))
 }))
 
