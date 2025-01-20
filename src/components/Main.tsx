@@ -6,8 +6,9 @@ import useStoreId from "../store/storeId";
 
 export default function Main() {
   //initialize useStoreId  
-  const storeDieData = useStoreId((state) => state.storeDieData)
+  const {storeDieData} = useStoreId()
   const [dieData, setDieData] = useState<DieData[]>([])
+
   //load data
   useEffect(() => {
     const data = getDieData()
@@ -16,19 +17,43 @@ export default function Main() {
 
   // handle the roll button
   const handleRoll = () => {
-    console.log(storeDieData)
-    const dataArr = getDieData()
+    const rolledDieData = getDieData()
+    const newData = rolledDieData.map((rolledDie) => {
 
-    // const newData = dataArr.map((data) => {
-    //   if(data.id === storeDieData.id) {
-    //     return {...data, storeDieData.value}
-    //   } else {
-    //     return {...data}
-    //   }
-    // })
+      const matchingId = storeDieData.find(dieData => rolledDie.id === dieData.id)
+      return matchingId ? matchingId : rolledDie
+    })
 
-    setDieData(dataArr)
+    // setDieData(data)
+    setDieData(newData)
   }
+
+  // handle the selected class
+  const handleSelected = (id: number, value: number) => {
+    setDieData(prevDieData => {
+      return prevDieData.map(dieData => 
+        dieData.id === id ? {...dieData, selected: !dieData.selected} : dieData)
+    })
+
+    console.log(value)
+  };
+
+  // map each data and render its values
+  const gridItem = dieData.map((die) => {
+    return (
+      <Die
+        key={die.id}
+        value={die.value}
+        selected={die.selected}
+        dieId={die.id}
+        handleSelect={handleSelected}
+      />
+      // <div 
+      //   className={`grid_item ${die.selected ? "selected" : null}`}
+        
+      // </div>
+    )
+  })
 
   return (
     <main className="main">
@@ -37,7 +62,9 @@ export default function Main() {
           <h1>Tenzies</h1>
           <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
         </section>
-        <Die data={dieData}/>
+        <div className="grid_container">
+          {gridItem}
+        </div>
         <button className="dice_btn" onClick={handleRoll}>Roll</button>
       </div>
     </main>
