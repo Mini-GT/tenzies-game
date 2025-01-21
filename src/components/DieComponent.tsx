@@ -1,20 +1,22 @@
+import { DieData } from "../types/dieData.types"
+
 type DieProps = {
   value: number
   selected: boolean
-  dieId: number
-  handleSelect: (id: number, value: number) => void
+  id: number
+  handleSelect: (...args: DieData[]) => void
 }
 
 export default function Die({
   value,
   selected,
-  dieId,
+  id,
   handleSelect
 } : DieProps) {
   return (
     <button 
       className={`grid_button ${selected ? "selected" : null}`}
-      onClick={() => handleSelect(dieId, value)}
+      onClick={() => handleSelect({id, value, selected})}
     >
       {value}
     </button>
