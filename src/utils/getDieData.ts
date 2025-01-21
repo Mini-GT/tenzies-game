@@ -12,7 +12,6 @@ export const getDieData = (): DieData[] => {
       }
     )
   }
-  console.log(DieData)
   return DieData
 };
 
