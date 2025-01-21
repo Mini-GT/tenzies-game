@@ -2,40 +2,59 @@ import Die from "./DieComponent";
 import { getDieData } from "../utils/getDieData"
 import { useEffect, useState } from "react";
 import { DieData } from "../types/dieData.types";
-import useStoreId from "../store/storeId";
 
 export default function Main() {
   //initialize useStoreId  
-  const {storeDieData} = useStoreId()
+  const [selectedDie, setSelectedDie] = useState<DieData[]>([])
+  const [ isWon, setIsWon] = useState<boolean>(false)
   const [dieData, setDieData] = useState<DieData[]>([])
 
   //load data
-  useEffect(() => {
+  useEffect((): void => {
     const data = getDieData()
     setDieData(data)
   }, [])
 
   // handle the roll button
-  const handleRoll = () => {
-    const rolledDieData = getDieData()
-    const newData = rolledDieData.map((rolledDie) => {
+  const handleRoll = (): void => {
+    if(isWon) {
+      setSelectedDie([])
+      setIsWon(false)
+      const data = getDieData()
+      setDieData(data)
+    }
 
-      const matchingId = storeDieData.find(dieData => rolledDie.id === dieData.id)
-      return matchingId ? matchingId : rolledDie
+    const rolledDie = getDieData().map(rolled => {
+      const matchedDie = selectedDie.find(selected => selected.id === rolled.id)
+      return matchedDie || rolled
     })
 
-    // setDieData(data)
-    setDieData(newData)
+    setDieData(rolledDie)
   }
 
   // handle the selected class
-  const handleSelected = (id: number, value: number) => {
+  const handleSelect = (args: DieData): void => {
+    //if all dice are same values
+    const sameDieNum = dieData.every(die => die.value === args.value)
+    if(sameDieNum) {
+      setIsWon(!isWon)
+      alert("you won")
+    }
+
     setDieData(prevDieData => {
       return prevDieData.map(dieData => 
-        dieData.id === id ? {...dieData, selected: !dieData.selected} : dieData)
+        dieData.id === args.id ? {...dieData, selected: !dieData.selected} : dieData)
     })
+    
 
-    console.log(value)
+    setSelectedDie(prevSelectedDie => {
+      // If die is already selected, remove it
+      if (prevSelectedDie.some(die => die.id === args.id)) {
+          return prevSelectedDie.filter(die => die.id !== args.id);
+      }
+      // If die is not selected, add it
+      return [...prevSelectedDie, {...args, selected: true}];
+    });
   };
 
   // map each data and render its values
@@ -45,13 +64,9 @@ export default function Main() {
         key={die.id}
         value={die.value}
         selected={die.selected}
-        dieId={die.id}
-        handleSelect={handleSelected}
+        id={die.id}
+        handleSelect={handleSelect}
       />
-      // <div 
-      //   className={`grid_item ${die.selected ? "selected" : null}`}
-        
-      // </div>
     )
   })
 
@@ -65,7 +80,7 @@ export default function Main() {
         <div className="grid_container">
           {gridItem}
         </div>
-        <button className="dice_btn" onClick={handleRoll}>Roll</button>
+        <button className="dice_btn" onClick={handleRoll}>{isWon ? "New Game" : "Roll"}</button>
       </div>
     </main>
   )
