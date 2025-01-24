@@ -2,6 +2,8 @@ import Die from "./DieComponent";
 import { getDieData } from "../utils/getDieData"
 import { useEffect, useState } from "react";
 import { DieData } from "../types/dieData.types";
+import Confetti from 'react-confetti'
+import { useWindowSize } from "react-use";
 
 export default function Main() {
   //initialize useStoreId  
@@ -18,10 +20,10 @@ export default function Main() {
   // handle the roll button
   const handleRoll = (): void => {
     if(isWon) {
-      setSelectedDie([])
-      setIsWon(false)
       const data = getDieData()
       setDieData(data)
+      setSelectedDie([])
+      setIsWon(false)
     }
 
     const rolledDie = getDieData().map(rolled => {
@@ -37,8 +39,8 @@ export default function Main() {
     //if all dice are same values
     const sameDieNum = dieData.every(die => die.value === args.value)
     if(sameDieNum) {
-      setIsWon(!isWon)
       alert("you won")
+      setIsWon(!isWon)
     }
 
     setDieData(prevDieData => {
@@ -70,18 +72,20 @@ export default function Main() {
     )
   })
 
+  const {width, height} = useWindowSize()
   return (
-    <main className="main">
-      <div className="main_container"> 
-        <section className="main_content">
-          <h1>Tenzies</h1>
-          <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
-        </section>
-        <div className="grid_container">
-          {gridItem}
-        </div>
-        <button className="dice_btn" onClick={handleRoll}>{isWon ? "New Game" : "Roll"}</button>
-      </div>
-    </main>
+      <main className="main">
+        {isWon && <Confetti width={width} height={height} recycle={false}/>}
+          <div className="main_container"> 
+            <section className="main_content">
+              <h1>Tenzies</h1>
+              <p>Roll until all dice are the same. Click each die to freeze it at its current value between rolls.</p>
+            </section>
+            <div className="grid_container">
+              {gridItem}
+            </div>
+            <button className="dice_btn" onClick={handleRoll}>{isWon ? "New Game" : "Roll"}</button>
+          </div>
+      </main>
   )
 }
